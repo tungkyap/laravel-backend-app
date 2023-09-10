@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Policies\CategoryPolicy;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:sanctum');
-        $this->authorizeResource(Category::class, 'category');
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->authorizeResource(CategoryPolicy::class, 'category');
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Category::all();
+        // return Category::all();
+        return CategoryResource::collection(Category::all());
     }
 
     /**
